@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<ul class="mui-table-view">
+			<li class="mui-table-view-divider">讨论区</li>
+			<li class="mui-table-view-divider">优质帖子</li>
+			<li class="mui-table-view-divider">招聘</li>
+			<li class="mui-table-view-divider">发布新话题</li>
+		</ul>
+	</body>
+	
+	<script type="text/javascript">
+		/**
+			 * 关闭侧滑菜单
+			 */
+			function close() {
+				mui.fire(mui.currentWebview.opener(),"menu:close");
+			}
+		//监听左滑事件，若菜单已展开，左滑要关闭菜单；
+			window.addEventListener("swipeleft",function (e) {
+				if(Math.abs(e.detail.angle)>170){
+					close();						
+				}
+			});
+	</script>
+</html>
