@@ -1,55 +1,58 @@
 <!DOCTYPE html>
 <html>
+
 	<head>
 		<meta charset="utf-8">
 		<title></title>
 		<link rel="stylesheet" href="css/mui.min.css">
+		<link href="css/icon.css" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	</head>
+
 	<body>
 		<ul class="mui-table-view">
 			<li class="mui-table-view-divider">
-				<span class="mui-icon mui-icon-chatboxes"></span>
-				讨论区
+				<!--<span class="mui-icon mui-icon-chatboxes"></span>-->
+				<i class="mui-icon material-icons">question_answer</i> 讨论区
 			</li>
 			<li class="mui-table-view-divider">
-				<span class="mui-icon mui-icon-star"></span>
-				优质帖子
+				<span class="mui-icon mui-icon-star"></span> 优质帖子
 			</li>
 			<li class="mui-table-view-divider">
-				<span class="mui-icon mui-icon-personadd"></span>
-				招聘
+				<span class="mui-icon mui-icon-personadd"></span> 招聘
 			</li>
 			<li class="mui-table-view-divider">
-				<span class="mui-icon mui-icon-compose"></span>
-				发布新话题
+				<!--<span class="mui-icon mui-icon-compose"></span>-->
+				<i class="mui-icon material-icons">mode_edit</i> 发布新话题
 			</li>
 		</ul>
-		
-			<ul class="mui-table-view" style="bottom: 0;position: absolute;">
-				<li class="mui-table-view-divider">
-					<span class="mui-icon mui-icon-gear"></span>
-				设置
-				</li>
-				<li class="mui-table-view-divider">
-					<span class="mui-icon mui-icon-arrowthinleft"></span>
-				登出
-				</li>
-			</ul>
+
+		<ul class="mui-table-view" style="width:100%;bottom: 0;position: absolute;">
+			<li class="mui-table-view-divider">
+				<!--<span class="mui-icon mui-icon-gear"></span>-->
+				<i class="mui-icon material-icons">settings</i> 设置
+			</li>
+			<li class="mui-table-view-divider">
+				<!--<span class="mui-icon mui-icon-arrowthinleft"></span>-->
+				<i class="material-icons">exit_to_app</i> 登出
+			</li>
+		</ul>
 
 	</body>
-	
+
 	<script type="text/javascript">
 		/**
-			 * 关闭侧滑菜单
-			 */
-			function close() {
-				mui.fire(mui.currentWebview.opener(),"menu:close");
-			}
+		 * 关闭侧滑菜单
+		 */
+		function close() {
+			mui.fire(mui.currentWebview.opener(), "menu:close");
+		}
 		//监听左滑事件，若菜单已展开，左滑要关闭菜单；
-			window.addEventListener("swipeleft",function (e) {
-				if(Math.abs(e.detail.angle)>170){
-					close();						
-				}
-			});
+		window.addEventListener("swipeleft", function(e) {
+			if (Math.abs(e.detail.angle) > 170) {
+				close();
+			}
+		});
 	</script>
+
 </html>

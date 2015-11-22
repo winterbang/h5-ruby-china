@@ -1,0 +1,39 @@
+.material-icons {
+	font-family: 'Material Icons';
+	font-weight: normal;
+	font-style: normal;
+	font-size: 24px;
+	/* Preferred icon size */
+	text-transform: none;
+	letter-spacing: normal;
+	word-wrap: normal;
+	white-space: nowrap;
+	direction: ltr;
+	/* Support for all WebKit browsers. */
+	-webkit-font-smoothing: antialiased;
+	/* Support for Safari and Chrome. */
+	text-rendering: optimizeLegibility;
+	/* Support for Firefox. */
+	-moz-osx-font-smoothing: grayscale;
+	/* Support for IE. */
+	font-feature-settings: 'liga';
+}
+
+
+/*侧边导航*/
+
+.mui-off-canvas-left {
+	width: 60%;
+	background: #F7F7F7;
+}
+
+
+/*header*/
+
+.mui-title {
+	padding-left: 10px;
+	text-align: left;
+	color: #FFFFFF;
+	font-weight: 700;
+	font-size: small;
+}
