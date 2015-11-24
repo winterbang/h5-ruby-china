@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<script src="../js/mui.min.js"></script>
+		<script src="../js/template.js"></script>
+		<script src="../js/highlight.min.js"></script>
+		<link href="../css/mui.min.css" rel="stylesheet" />
+		<link rel="stylesheet" href="../css/highlight.min.css">
+		<link href="../css/icon.css" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<script type="text/javascript" charset="utf-8">
+			mui.init();
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview();
+				var href = self.href;
+				mui.getJSON('https://ruby-china.org/api/v3' + href, {}, function(data) {
+					var html = template('show-tpl', data.topic);
+					document.getElementById('show-h').innerHTML = html
+					document.getElementById('show-cont').innerHTML = data.topic.body_html
+				})
+				mui('pre code').each(function(i, block) {
+    hljs.highlightBlock(block);
+  });
+			})
+			hljs.initHighlightingOnLoad();
+		</script>
+	</head>
+
+	<body>
+		<header class="mui-bar mui-bar-nav">
+			<a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+			<a class="mui-icon material-icons mui-pull-right">more_vert</a>
+			<a class="mui-icon material-icons mui-pull-right"> thumb_up</a>
+			<a class="mui-icon material-icons mui-pull-right">visibility</a>
+			<a class="mui-icon material-icons mui-pull-right">turned_in</a>
+		</header>
+		<div class="mui-content mui-scroll" id='show'>
+			<ul class="mui-table-view" id='show-h'>
+
+			</ul>
+			<div class="" id='show-cont' style="padding:0 15px;">
+
+			</div>
+		</div>
+
+		<script id="show-tpl" type="text/html">
+			<li class="mui-table-view-cell rc-img">
+				<a href="">
+					<img class="mui-media-object mui-pull-left" src="{{user.avatar_url}}">
+				</a>
+				<div class="mui-media-body">
+					{{user.name}}
+					<p class='mui-ellipsis mui-pull-right'>{{created_at}}</p>
+				</div>
+			</li>
+			<li class="mui-table-view-cell">
+				{{title}}
+			</li>
+			<li class="mui-table-view-cell">
+				<p class="mui-pull-left"><a class="mui-icon material-icons"> thumb_up</a>{{likes_count}}个赞</p>
+				<p class="mui-pull-right"><i class="mui-icon material-icons" style="color:#5e97f6">question_answer</i>{{replies_count}}条回复</p>
+			</li>
+		</script>
+
+	</body>
+
+</html>

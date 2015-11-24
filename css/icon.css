@@ -17,6 +17,7 @@
 	-moz-osx-font-smoothing: grayscale;
 	/* Support for IE. */
 	font-feature-settings: 'liga';
+	vertical-align: middle;
 }
 
 
@@ -37,3 +38,28 @@
 	font-weight: 700;
 	font-size: small;
 }
+
+.mui-table-view-cell:after {
+	left:0px;
+}
+
+.line:after {
+	width:1px;
+	position:absolute;
+	top:0px;
+	left:0px;
+	background:#C0C0C0;
+}
+
+.rc-img {
+	position: relative;
+	padding-left:60px;
+}
+
+.rc-img > a:not(.mui-btn){
+	position: absolute;
+	left:0px;
+	top:0px
+}
+
+img{ width: 100%; height: auto;max-width: 100%; display: block; }

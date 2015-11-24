@@ -6,46 +6,122 @@
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
 		<title></title>
 		<script src="js/mui.min.js"></script>
+		<script src="js/template.js"></script>
 		<link href="css/mui.min.css" rel="stylesheet" />
 		<link href="css/icon.css" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		<script type="text/javascript" charset="utf-8">
 			mui.init();
 			mui.plusReady(function() {
-				mui.getJSON('https://ruby-china.org/api/v3/hello.json', {}, function(data) {
-					console.log('test')
-					console.log(data)
+				mui.getJSON('https://ruby-china.org/api/v3/topics.json', {
+					type: 'excellent'
+				}, function(data) {
+					mui.each(data.topics, function(key, val) {
+						var html = template('list-tpl', val);
+						document.getElementById('list').innerHTML += html
+					})
 				});
-//				1a6ec3e11f74e36edfb0cfe90d22ee08cdf23d70c8f2b857c2037cf55851d62f
-				mui.ajax('https://ruby-china.org/oauth/authorize', {
-					data: {
-						client_id: 'd9808e3d',
-						redirect_uri: 'urn:ietf:wg:oauth:2.0:oob'
-					},
-					dataType: 'json', //服务器返回json格式数据
-					type: 'get', //HTTP请求类型
-					timeout: 10000, //超时时间设置为10秒；
-					success: function(data) {
-						//服务器返回响应，根据响应结果，分析是否登录成功；
-						console.log(data)
-					},
-					error: function(xhr, type, errorThrown) {
-						//异常处理；
-						console.log('error');
-						console.log(xhr)
-						console.log(type);
-						console.log(errorThrown)
-					}
-				});
-				//				点击左上角侧滑图标，打开侧滑菜单；
+				//				//敲击顶部导航，内容区回到顶部
+				//				main = plus.webview.currentWebview();
+				//				document.querySelector('header').addEventListener('tap', function() {
+				//					console.log('doubletap')
+				//					main.children()[0].evalJS('mui.scrollTo(0, 100)');
+				//				});
+				//主界面滚动
+				mui('.mui-scroll-wrapper').scroll();
+				// 打开设置页面
+				document.querySelector('#settings').addEventListener('tap', function(e) {
+						mui.openWindow({
+							url: 'views/settings.html',
+							id: 'settings.html',
+							styles: {},
+							extras: {
+								//自定义扩展参数，可以用来处理页面间传值
+							},
+							createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+							show: {
+								autoShow: true, //页面loaded事件发生后自动显示，默认为true
+							},
+							waiting: {
+								autoShow: true, //自动显示等待框，默认为true
+								title: '正在加载...', //等待对话框上显示的提示内容
+								options: {}
+							}
+						})
+					})
+					// 打开详情页面
+				mui('#list').on('tap', '.mui-table-view-cell', function() {
+						console.log(this.getElementsByTagName("a")[0].getAttribute('href'))
+						mui.openWindow({
+							url: 'views/detail.html',
+							id: 'detail.html',
+							styles: {},
+							extras: {
+								href: this.getElementsByTagName("a")[0].getAttribute('href')
+									//自定义扩展参数，可以用来处理页面间传值
+							},
+							createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+							show: {
+								autoShow: true, //页面loaded事件发生后自动显示，默认为true
+							},
+							waiting: {
+								autoShow: true, //自动显示等待框，默认为true
+								title: '正在加载...', //等待对话框上显示的提示内容
+								options: {}
+							}
+						})
+					})
+					//				document.querySelector('.mui-table-view-cell').addEventListener('tap', function(e) {
+					//						console.log('tapppp')
+					//						mui.openWindow({
+					//							url: 'views/detail.html',
+					//							id: 'detail.html',
+					//							styles: {},
+					//							extras: {
+					//								//自定义扩展参数，可以用来处理页面间传值
+					//							},
+					//							createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+					//							show: {
+					//								autoShow: true, //页面loaded事件发生后自动显示，默认为true
+					//							},
+					//							waiting: {
+					//								autoShow: true, //自动显示等待框，默认为true
+					//								title: '正在加载...', //等待对话框上显示的提示内容
+					//								options: {}
+					//							}
+					//						})
+					//					})
+					//				点击左上角侧滑图标，打开侧滑菜单；
 				var showMenu = false;
 				document.querySelector('#dehaze').addEventListener('tap', function(e) {
+					console.log('tap dehaze')
 					if (showMenu) {
 						mui('.mui-off-canvas-wrap').offCanvas('close');
 					} else {
 						mui('.mui-off-canvas-wrap').offCanvas('show');
 					}
 				});
+				//首页返回键处理
+				//处理逻辑：1秒内，连续两次按返回键，则退出应用；
+				var first = null;
+				mui.back = function() {
+					if (showMenu) {
+						closeMenu();
+					} else {
+						//首次按键，提示‘再按一次退出应用’
+						if (!first) {
+							first = new Date().getTime();
+							mui.toast('再按一次退出应用');
+							setTimeout(function() {
+								first = null;
+							}, 1000);
+						} else {
+							if (new Date().getTime() - first < 1000) {
+								plus.runtime.quit();
+							}
+						}
+					}
+				}
 			})
 		</script>
 	</head>
@@ -67,30 +143,32 @@
 								</div>
 							</a>
 						</li>
-						<li class="mui-table-view-divider">
+						<li class="mui-table-view-cell">
 							<!--<span class="mui-icon mui-icon-chatboxes"></span>-->
-							<i class="mui-icon material-icons">question_answer</i> 讨论区
+							<i class="mui-icon material-icons" style="color:#5e97f6">question_answer</i> 讨论区
 						</li>
-						<li class="mui-table-view-divider">
-							<span class="mui-icon mui-icon-star"></span> 优质帖子
+						<li class="mui-table-view-cell">
+							<!--<span class="mui-icon mui-icon-star"  style="color:#e06055"></span>-->
+							<i class="mui-icon material-icons" style="color:#e06055">local_activity</i> 优质帖子
 						</li>
-						<li class="mui-table-view-divider">
-							<span class="mui-icon mui-icon-personadd"></span> 招聘
+						<li class="mui-table-view-cell">
+							<!--<span class="mui-icon mui-icon-personadd" style="color:#f6bf32"></span>-->
+							<i class="mui-icon material-icons" style="color:#f6bf32">person_pin</i> 招聘
 						</li>
-						<li class="mui-table-view-divider">
+						<li class="mui-table-view-cell">
 							<!--<span class="mui-icon mui-icon-compose"></span>-->
-							<i class="mui-icon material-icons">mode_edit</i> 发布新话题
+							<i class="mui-icon material-icons" style="color:#57bb8a">mode_edit</i> 发布新话题
 						</li>
 					</ul>
 
 					<ul class="mui-table-view" style="width:100%;bottom: 0;position: absolute;">
-						<li class="mui-table-view-divider">
+						<li class="mui-table-view-cell" id="settings">
 							<!--<span class="mui-icon mui-icon-gear"></span>-->
 							<i class="mui-icon material-icons">settings</i> 设置
 						</li>
-						<li class="mui-table-view-divider">
+						<li class="mui-table-view-cell">
 							<!--<span class="mui-icon mui-icon-arrowthinleft"></span>-->
-							<i class="material-icons">exit_to_app</i> 登出
+							<i class="material-icons">power_settings_new</i> 登出
 						</li>
 					</ul>
 				</div>
@@ -98,9 +176,9 @@
 			<!-- 主页面容器 -->
 			<div class="mui-inner-wrap">
 				<!-- 主页面标题 -->
-				<header class="mui-bar mui-bar-nav" style="background: #d64c28;color:#fff">
+				<header class="mui-bar mui-bar-nav" style="background: #e34d43;color:#fff">
 					<!--<a class="mui-icon mui-icon-bars mui-pull-left"></a>-->
-					<i class="mui-action-menu mui-icon material-icons" id='dehaze'>dehaze</i>
+					<i class="mui-action-menu mui-icon material-icons" id="dehaze">dehaze</i>
 					<h1 class="mui-title">Ruby China</h1>
 					<!--<a id="info" class="mui-icon mui-icon-info-filled mui-pull-right" style="color: #999;"></a>-->
 					<i class="mui-icon material-icons mui-pull-right">notifications_none</i>
@@ -110,47 +188,25 @@
 					<div class="mui-scroll">
 						<!-- 主界面具体展示内容 -->
 						<ul id="list" class="mui-table-view mui-table-view-chevron">
-							<li class="mui-table-view-cell mui-hidden">cared
-								<div id="M_Toggle" class="mui-switch mui-active">
-									<div class="mui-switch-handle"></div>
-								</div>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a href="#">
-									<img class="mui-media-object mui-pull-left" src="http://dcloudio.github.io/mui/assets/img/shuijiao.jpg">
-									<div class="mui-media-body">
-										Redis 实现 Cache 系统实践
-										<p class='mui-ellipsis'>hfpp2012</p>
-									</div>
-								</a>
-								<span class="mui-badge mui-badge-inverted">5</span>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a href="#">
-									<img class="mui-media-object mui-pull-left" src="http://dcloudio.github.io/mui/assets/img/muwu.jpg">
-									<div class="mui-media-body">
-										用Ruby快速开发一个静态服务全过程
-										<p class='mui-ellipsis'>vincenting</p>
-									</div>
-								</a>
-								<span class="mui-badge mui-badge-inverted">9</span>
-							</li>
-							<li class="mui-table-view-cell mui-media">
-								<a href="#">
-									<img class="mui-media-object mui-pull-left" src="http://dcloudio.github.io/mui/assets/img/cbd.jpg">
-									<div class="mui-media-body">
-										Ruby开发者如何研读GitHub上优秀Rails项目源码呢？
-										<p class='mui-ellipsis'>margin91</p>
-									</div>
-								</a>
-								<span class="mui-badge mui-badge-inverted">18</span>
-							</li>
 
 						</ul>
 					</div>
 				</div>
 			</div>
 		</div>
+
+		<script id="list-tpl" type="text/html">
+			<li class="mui-table-view-cell mui-media">
+				<a href="/topics/{{id}}.json">
+					<img class="mui-media-object mui-pull-left" src="{{ user.avatar_url }}">
+					<div class="mui-media-body">
+						<span class="mui-ellipsis-2">{{ title }}</span>
+						<p class='mui-ellipsis'>{{ user.name }}</p>
+					</div>
+				</a>
+				<span class="mui-badge mui-badge-inverted">{{ replies_count }}</span>
+			</li>
+		</script>
 
 	</body>
 
