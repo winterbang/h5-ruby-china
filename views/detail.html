@@ -20,11 +20,11 @@
 				mui.getJSON('https://ruby-china.org/api/v3' + href, {}, function(data) {
 					var html = template('show-tpl', data.topic);
 					document.getElementById('show-h').innerHTML = html
-					document.getElementById('show-cont').innerHTML = data.topic.body_html
+				document.getElementById('show-cont').innerHTML = data.topic.body_html
 				})
 				mui('pre code').each(function(i, block) {
-    hljs.highlightBlock(block);
-  });
+					hljs.highlightBlock(block);
+				});
 			})
 			hljs.initHighlightingOnLoad();
 		</script>
