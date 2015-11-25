@@ -4,7 +4,7 @@
 	<head>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title></title>
+		<title>主页</title>
 		<script src="js/mui.min.js"></script>
 		<script src="js/template.js"></script>
 		<link href="css/mui.min.css" rel="stylesheet" />
@@ -18,6 +18,9 @@
 					styles: {
 						top: 48, //内容页面顶部位置,需根据实际页面布局计算，若使用标准mui导航，顶部默认为48px；
 						bottom: 0 //其它参数定义
+					},
+					extras: {
+						type: 'excellent'
 					}
 				}],
 				pullRefresh: {
@@ -55,26 +58,7 @@
 				});
 				//主界面滚动
 //				mui('.mui-scroll-wrapper').scroll();
-				// 打开设置页面
-				document.querySelector('#settings').addEventListener('tap', function(e) {
-					mui.openWindow({
-						url: 'views/settings.html',
-						id: 'settings.html',
-						styles: {},
-						extras: {
-							//自定义扩展参数，可以用来处理页面间传值
-						},
-						createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-						show: {
-							autoShow: true, //页面loaded事件发生后自动显示，默认为true
-						},
-						waiting: {
-							autoShow: true, //自动显示等待框，默认为true
-							title: '正在加载...', //等待对话框上显示的提示内容
-							options: {}
-						}
-					})
-				})
+				
 				var isInTransition = false;
 				/**
 				 * 显示侧滑菜单

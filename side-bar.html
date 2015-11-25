@@ -3,10 +3,13 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title></title>
+		<title>侧边导航</title>
+		<script src="js/mui.min.js"></script>
+		<script src="js/side-bar.js"></script>
 		<link rel="stylesheet" href="css/mui.min.css">
 		<link href="css/icon.css" rel="stylesheet" />
 		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		
 	</head>
 
 	<body>
@@ -28,7 +31,7 @@
 				<!--<span class="mui-icon mui-icon-star"  style="color:#e06055"></span>-->
 				<i class="mui-icon material-icons" style="color:#e06055">local_activity</i> 优质帖子
 			</li>
-			<li class="mui-table-view-cell">
+			<li class="mui-table-view-cell" id='job'>
 				<!--<span class="mui-icon mui-icon-personadd" style="color:#f6bf32"></span>-->
 				<i class="mui-icon material-icons" style="color:#f6bf32">person_pin</i> 招聘
 			</li>
@@ -51,18 +54,7 @@
 	</body>
 
 	<script type="text/javascript">
-		/**
-		 * 关闭侧滑菜单
-		 */
-		function close() {
-			mui.fire(mui.currentWebview.opener(), "menu:close");
-		}
-		//监听左滑事件，若菜单已展开，左滑要关闭菜单；
-		window.addEventListener("swipeleft", function(e) {
-			if (Math.abs(e.detail.angle) > 170) {
-				close();
-			}
-		});
+		
 	</script>
 
 </html>

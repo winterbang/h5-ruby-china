@@ -3,7 +3,7 @@
 
 	<head>
 		<meta charset="utf-8">
-		<title>Hello MUI</title>
+		<title>列表</title>
 		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -65,12 +65,19 @@
 					}
 				}
 			});
+			
+			
 			mui.plusReady(function() {
-				mui.getJSON('https://ruby-china.org/api/v3/topics.json', {
-					type: 'excellent'
-				}, function(data) {
+				var self = plus.webview.currentWebview()
+				var node_id, params={type: self.type}
+				if(self.node_id){
+					mui.extend(params,{node_id: self.node_id});
+				}
+				console.log(JSON.stringify(params));
+				mui.getJSON('https://ruby-china.org/api/v3/topics.json', params, function(data) {
 					mui.each(data.topics, function(key, val) {
 						var html = template('list-tpl', val);
+						console.log('33333333')
 						document.getElementById('list').innerHTML += html
 					})
 				});
