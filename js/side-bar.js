@@ -3,11 +3,6 @@ mui.plusReady(function() {
 	var main = plus.webview.getLaunchWebview()
 	var current = plus.webview.currentWebview()
 	var list = plus.webview.getWebviewById('list')
-	console.log(list.parent().getTitle())
-	console.log(list.opener)
-	console.log(main.getTitle())
-	console.log(current.getTitle())
-	console.log(list.getTitle())
 	plus.webview.hide(current);
 	// 打开设置页面
 	document.querySelector('#settings').addEventListener('tap', function(e) {

@@ -69,6 +69,13 @@
 			
 			mui.plusReady(function() {
 				var self = plus.webview.currentWebview()
+				var main = plus.webview.getLaunchWebview()
+				// 右滑打开侧边导航
+				document.addEventListener('swiperight', function(){
+					console.log('test')
+					main.evalJS("mui.trigger(document.querySelector('#dehaze'),'tap');")
+				})
+				
 				var node_id, params={type: self.type}
 				if(self.node_id){
 					mui.extend(params,{node_id: self.node_id});
