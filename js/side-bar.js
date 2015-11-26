@@ -34,13 +34,14 @@ mui.plusReady(function() {
 	// 打开招聘页面
 
 	mui('#job')[0].addEventListener('tap', function() {
-		var job_list = plus.webview.create('home.html', 'list', {
+		var job_list = plus.webview.create('home.html', 'job-list', {
 			top: 46,
 			bottom: 0
 		}, {
 			type: 'excellent',
 			node_id: 25
 		});
+		plus.webview.hide( list )
 		console.log(job_list)
 		main.append(job_list)
 		list.close()
