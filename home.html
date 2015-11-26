@@ -72,7 +72,6 @@
 				var main = plus.webview.getLaunchWebview()
 				// 右滑打开侧边导航
 				document.addEventListener('swiperight', function(){
-					console.log('test')
 					main.evalJS("mui.trigger(document.querySelector('#dehaze'),'tap');")
 				})
 				
@@ -81,10 +80,11 @@
 					mui.extend(params,{node_id: self.node_id});
 				}
 				console.log(JSON.stringify(params));
-				mui.getJSON('https://ruby-china.org/api/v3/topics.json', params, function(data) {
+				console.log({type: 'excellent'})
+				console.log(params)
+				mui.getJSON('https://ruby-china.org/api/v3/topics.json',params, function(data) {
 					mui.each(data.topics, function(key, val) {
 						var html = template('list-tpl', val);
-						console.log('33333333')
 						document.getElementById('list').innerHTML += html
 					})
 				});

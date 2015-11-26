@@ -29,41 +29,38 @@ mui.plusReady(function() {
 	// 打开招聘页面
 
 	mui('#job')[0].addEventListener('tap', function() {
-		var job_list = plus.webview.create('home.html', 'job-list', {
-			top: 46,
-			bottom: 0
-		}, {
-			type: 'excellent',
-			node_id: 25
-		});
-		plus.webview.hide( list )
-		console.log(job_list)
-		main.append(job_list)
-		list.close()
+//		var job_list = plus.webview.create('home.html', 'job-list', {
+//			top: 46,
+//			bottom: 0
+//		}, {
+//			node_id: 25
+//		});
+//		plus.webview.hide( list )
+//		console.log(job_list)
+//		main.append(job_list)
+//		list.close()
 //		list.removeFromParent()
 //		list.hide()
-		console.log(list.isVisible())
-		job_list.show
+//		console.log(list.isVisible())
+//		job_list.show
      	
-
-			//		mui.openWindow({
-			//			url: 'home.html',
-			//			id: 'settings.html',
-			//			styles: {},
-			//			extras: {
-			//				type: 'excellent',
-			//				node_id: 25
-			//			},
-			//			createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
-			//			show: {
-			//				autoShow: true, //页面loaded事件发生后自动显示，默认为true
-			//			},
-			//			waiting: {
-			//				autoShow: true, //自动显示等待框，默认为true
-			//				title: '正在加载...', //等待对话框上显示的提示内容
-			//				options: {}
-			//			}
-			//		})
+					mui.openWindow({
+						url: 'views/jobs/index.html',
+						id: 'job-index.html',
+						styles: {},
+						extras: {
+							node_id: '25'
+						},
+						createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+						show: {
+							autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						},
+						waiting: {
+							autoShow: true, //自动显示等待框，默认为true
+							title: '正在加载...', //等待对话框上显示的提示内容
+							options: {}
+						}
+					})
 	})
 
 
@@ -73,8 +70,6 @@ mui.plusReady(function() {
 	}
 	//监听左滑事件，若菜单已展开，左滑要关闭菜单；
 	window.addEventListener("swipeleft", function(e) {
-		console.log('ssss')
-		console.log(Math.abs(e.detail.angle))
 		if (Math.abs(e.detail.angle) > 170) {
 			close();
 		}

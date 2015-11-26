@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>列表</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1, user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<script src="js/mui.min.js"></script>
+		<script src="js/template.js"></script>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/icon.css" rel="stylesheet" />
+		<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+		<style type="text/css">
+			#list {
+				/*避免导航边框和列表背景边框重叠，看起来像两条边框似得；*/
+				margin-top: -1px;
+			}
+		</style>
+		<script type="text/javascript">
+			var offset = 0
+			var limit = 20
+			mui.init({
+				pullRefresh: {
+					container: "#refreshContainer", //下拉刷新容器标识，querySelector能定位的css选择器均可，比如：id、.class等
+					down: {
+						contentdown: "下拉可以刷新", //可选，在下拉可刷新状态时，下拉刷新控件上显示的标题内容
+						contentover: "释放立即刷新", //可选，在释放可刷新状态时，下拉刷新控件上显示的标题内容
+						contentrefresh: "正在刷新...", //可选，正在刷新状态时，下拉刷新控件上显示的标题内容
+						callback: function() {
+							mui.getJSON('https://ruby-china.org/api/v3/topics.json', {
+								type: 'excellent'
+							}, function(data) {
+								var list = []
+								mui.each(data.topics, function(key, val) {
+									var html = template('list-tpl', val);
+									list.push(html)
+								})
+								document.getElementById('list').innerHTML = list.join('')
+								mui('#refreshContainer').pullRefresh().endPulldownToRefresh();
+							});
+						}
+					},
+					up: {
+						contentrefresh: "正在加载...", //可选，正在加载状态时，上拉加载控件上显示的标题内容
+						contentnomore: '没有更多数据了', //可选，请求完毕若没有更多数据时显示的提醒内容；
+						callback: function() {
+							offset +=  limit
+							mui.getJSON('https://ruby-china.org/api/v3/topics.json', {
+									type: 'excellent',
+									offset: offset
+								}, function(data) {
+									var no_data =false
+									mui.each(data.topics, function(key, val) {
+										var html = template('list-tpl', val);
+										document.getElementById('list').innerHTML += html
+									})
+									if (data.topics.length < limit) {
+										no_data = true
+									}
+									mui('#refreshContainer').pullRefresh().endPullupToRefresh(no_data);
+								}) //必选，刷新函数，根据具体业务来编写，比如通过ajax从服务器获取新数据；
+						}
+					}
+				}
+			});
+			
+			
+			mui.plusReady(function() {
+				var self = plus.webview.currentWebview()
+				var main = plus.webview.getLaunchWebview()
+				// 右滑打开侧边导航
+				document.addEventListener('swiperight', function(){
+					console.log('test')
+					main.evalJS("mui.trigger(document.querySelector('#dehaze'),'tap');")
+				})
+				
+				var node_id, params={type: self.type}
+				if(self.node_id){
+					mui.extend(params,{node_id: self.node_id});
+				}
+				console.log(JSON.stringify(params));
+				mui.getJSON('https://ruby-china.org/api/v3/topics.json',JSON.stringify(params), function(data) {
+					mui.each(data.topics, function(key, val) {
+						var html = template('list-tpl', val);
+						console.log(key)
+						console.log(html)
+						document.getElementById('list').innerHTML += html
+					})
+				});
+				mui('#list').on('tap', '.mui-table-view-cell', function() {
+					console.log(this.getElementsByTagName("a")[0].getAttribute('href'))
+					mui.openWindow({
+						url: 'views/detail.html',
+						id: 'detail.html',
+						styles: {},
+						extras: {
+							href: this.getElementsByTagName("a")[0].getAttribute('href')
+								//自定义扩展参数，可以用来处理页面间传值
+						},
+						createNew: false, //是否重复创建同样id的webview，默认为false:不重复创建，直接显示
+						show: {
+							autoShow: true, //页面loaded事件发生后自动显示，默认为true
+						},
+						waiting: {
+							autoShow: true, //自动显示等待框，默认为true
+							title: '正在加载...', //等待对话框上显示的提示内容
+							options: {}
+						}
+					})
+				})
+			})
+		</script>
+	</head>
+
+	<body>
+
+		<div id="refreshContainer" class="mui-content mui-scroll-wrapper">
+			<div class="mui-scroll">
+				<!--数据列表-->
+				<ul class="mui-table-view mui-table-view-chevron" id="list">
+
+				</ul>
+			</div>
+		</div>
+
+		<script id="list-tpl" type="text/html">
+			<li class="mui-table-view-cell mui-media">
+				<a href="/topics/{{id}}.json">
+					<img class="mui-media-object mui-pull-left" src="{{ user.avatar_url }}">
+					<div class="mui-media-body">
+						<span class="mui-ellipsis-2">{{ title }}</span>
+						<p class='mui-ellipsis'>{{ user.name }}</p>
+					</div>
+				</a>
+				<span class="mui-badge mui-badge-inverted">{{ replies_count }}</span>
+			</li>
+		</script>
+	</body>
+
+</html>
